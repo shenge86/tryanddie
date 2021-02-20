@@ -4,6 +4,27 @@ Created on Fri Feb 19 18:41:27 2021
 
 @author: sheng
 """
+
+#%% ASCII art
+person = r"""
+        
+              ////^\\\\
+              | ^   ^ |
+             @ (o) (o) @
+              |   <   |
+              |  ___  |
+               \_____/
+             ____|  |____
+            /    \__/    \
+           /              \
+          /\_/|        |\_/\
+         / /  |        |  \ \
+        ( <   |        |   > )
+         \ \  |        |  / /
+          \ \ |________| / /
+"""
+
+#%% classes
 class Person():
     def __init__(self,name,energy):
         self.name = name
@@ -33,10 +54,15 @@ class Person():
         self._energy = 10
         return self
     
+    # human actions
+    def yell(self,words):
+        print("I yelled as loudly as possible!")
+        print(words)
+    
     def fidget(self):
-        print("Fidgeting doesn't really help but it's my natural reaction right now.")
-        print("---------------------------------------------------------")
-
+        print("Fidgeting while standing here doesn't really help my current situation.")
+        print(person)
+        
 class Room():
     def __init__(self,name,visited):
         self.name = name
@@ -113,18 +139,18 @@ if __name__ == '__main__':
     while True:
         # first input loop
         enviro.create_room('cave')
-        while loop == 1:            
+        while loop == 1:
             if not enviro.room_visit('cave'):
                 print("A weird sensation struck me once I gained awareness. I look around and I see that I am in a dark cave lit up by mushrooms.")
                 print("'What the hell? Is this a dream?' I asked myself.")
                 enviro.room_visited_set('cave')
             
             if loop==1:
-                input_one = input("Whatever it may be, I don't want to stay in this dark any longer than I need to.\n> ")
+                input_one = input("I don't want to stay in this dark any longer than I need to.\n> ")
                 
             if input_one.lower() in ['shout', 'yell', 'scream']:
-                print("I yelled in fear and confusion! The echoes came back. There was no other response.")
-                print("Wow, that was quite the waste of energy, I thought.")                
+                enviro.person.yell("The echoes came back. There was no other response.")
+                print("Wow, that was quite the waste of energy, I thought.")   
                 enviro.personenergy -=1
             elif input_one.lower() in ['eat mushroom', 'eat', 'mushroom']:
                 print("I ate the mushroom and I instantly started shrinking. Also, I feel a bit stronger.")
