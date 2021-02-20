@@ -29,7 +29,11 @@ class Person():
     def __init__(self,name,energy):
         self.name = name
         self.energy = energy
-        
+    
+    # @property
+    # def name(self):
+    #     return self._name
+    
     @property
     def energy(self):
         return self._energy
@@ -47,14 +51,18 @@ class Person():
             print("Oh my god! I feel faint. I think I might be ...")
             print("DEAD!")
             
-    def reset(self):
+    def reset(self,name):
         print("I suddenly feel strength flowing through my body again.")
         print("*Gasp* I am alive!")
-        self._name = 'Shen'
+        self._name = name
         self._energy = 10
         return self
     
     # human actions
+    def eat(self,edible,energy):
+        print(f"I ate the {edible}.")
+        self.energy += energy
+        
     def yell(self,words):
         print("I yelled as loudly as possible!")
         print(words)
@@ -63,15 +71,23 @@ class Person():
         print("Fidgeting while standing here doesn't really help my current situation.")
         print(person)
         
+    def system(self):
+        print(f"Hello {self.name}! Welcome to the System help screen.")
+        print("Your stats are as follows:")
+        print("Energy:", self.energy)
+        print("Your actions possible are as follows:")
+        print("eat, fidget, system, yell")
+        print("Remember you just need to think of the word system and this will appear!")
+        
 class Room():
     def __init__(self,name,visited):
         self.name = name
         self.visited = visited
 
 class Enviro():
-    def __init__(self,deathstate):
+    def __init__(self,deathstate,person_name):
         self.deathstate = 0
-        self.person = Person('Shen',10)
+        self.person = Person(" ".join(w.capitalize() for w in person_name.split()),10)
         self.rooms = {}
     
     @property
@@ -94,8 +110,7 @@ class Enviro():
             print("How many times have I died now?")
             self._deathstate += 1
             print("Oh, ", self.deathstate)
-            self.person = self.person.reset()
-    
+            self.person = self.person.reset(self.person.name)
     
     # room classes
     def create_room(self,name):
@@ -130,10 +145,20 @@ if Test:
 #%%
 if __name__ == '__main__':
     print("---------------------------------------------------------")
-    print("Welcome to Try and Die - A Text Game of Possible Death")        
+    print("Welcome to Try and Die - A Text Game of Possible Death")
+    print("In this game, dying may be necessary to ultimately win.")
+    print("---------------------------------------------------------")
     # shen = Person('Shen',10)
     # print('Current energy: ', shen.energy)
-    enviro = Enviro(0)
+    print("A weird sensation struck me once I gained awareness. I look around and I see that I am in a dark cave lit up by mushrooms.")
+    print("'What the hell? Is this a dream?' I asked myself.")
+    print("Who am I anyway? After a moment of clutching my head, I slowly recalled my name.")
+    person_name = input("'I can't remember anything else but at least I know my name is: ")
+    enviro = Enviro(0,person_name)
+    print(f"Ah, that's right. My name is {enviro.person.name}")
+    
+    print("Suddenly, a massive blue screen filled my view. It was the most realistic hallucination I have ever seen.")
+    enviro.person.system()
     
     loop = 1
     while True:
@@ -141,20 +166,18 @@ if __name__ == '__main__':
         enviro.create_room('cave')
         while loop == 1:
             if not enviro.room_visit('cave'):
-                print("A weird sensation struck me once I gained awareness. I look around and I see that I am in a dark cave lit up by mushrooms.")
-                print("'What the hell? Is this a dream?' I asked myself.")
                 enviro.room_visited_set('cave')
             
             if loop==1:
-                input_one = input("I don't want to stay in this dark any longer than I need to.\n> ")
+                input_one = input("Am I in a virtual reality simulation? Whatever the case is, I don't want to stay in this dark any longer than I need to.\n> ")
                 
             if input_one.lower() in ['shout', 'yell', 'scream']:
                 enviro.person.yell("The echoes came back. There was no other response.")
                 print("Wow, that was quite the waste of energy, I thought.")   
                 enviro.personenergy -=1
             elif input_one.lower() in ['eat mushroom', 'eat', 'mushroom']:
-                print("I ate the mushroom and I instantly started shrinking. Also, I feel a bit stronger.")
-                enviro.personenergy +=1
+                enviro.person.eat("mushroom",1)
+                print("I instantly started shrinking. Also, I feel a bit stronger.")
                 print("Now that I am the size of a mouse, I can see that in front of me there is a small tunnel.")
                 print("It is possibly made by a small rodent.")
                 loop=2
@@ -165,6 +188,9 @@ if __name__ == '__main__':
             if loop==2:
                 print("Well, this is pretty tight but I think I can squeeze in.")
                 input_two = input("Should I climb in?\n> ")
+            
+            if input_two.lower() in ['system']:
+                enviro.person.system()
                 
             if input_two.lower() in ['climb', 'yes']:
                 print("I start to slowly crawl into the dirt tunnel. It is extremely hard to shuffle in this tunnel.")
