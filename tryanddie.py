@@ -35,12 +35,19 @@ class Person():
     
     def fidget(self):
         print("Fidgeting doesn't really help but it's my natural reaction right now.")
+        print("---------------------------------------------------------")
+
+class Room():
+    def __init__(self,name,visited):
+        self.name = name
+        self.visited = visited
 
 class Enviro():
     def __init__(self,deathstate):
         self.deathstate = 0
         self.person = Person('Shen',10)
-        
+        self.rooms = {}
+    
     @property
     def deathstate(self):
         return self._deathstate
@@ -48,7 +55,8 @@ class Enviro():
     @deathstate.setter
     def deathstate(self,val):
         self._deathstate = val
-        
+    
+    # person classes
     @property
     def personenergy(self):
         return self.person._energy
@@ -61,13 +69,42 @@ class Enviro():
             self._deathstate += 1
             print("Oh, ", self.deathstate)
             self.person = self.person.reset()
+    
+    
+    # room classes
+    def create_room(self,name):
+        # print(name)
+        self.rooms.update({name:Room(name,False)})
+    
+    @property
+    def room_state(self):
+        # print(self.rooms)
+        return self.rooms
+    
+    # check whether particular room has been visited
+    def room_visit(self,roomname):
+        return self.room_state[roomname].visited
 
+    # change room to visited
+    def room_visited_set(self,roomname):
+        self.room_state[roomname].visited = True
+
+#%% Test
+Test = False
+if Test:
+    enviro = Enviro(0)
+    enviro.create_room('study')
+    enviro.room_state
+    room_visited_state = enviro.room_visit('study')
+    print(room_visited_state)
+    enviro.room_visited_set('study')
+    room_visited_state = enviro.room_visit('study')
+    print(room_visited_state)
+        
+#%%
 if __name__ == '__main__':
     print("---------------------------------------------------------")
     print("Welcome to Try and Die - A Text Game of Possible Death")        
-    print("A weird sensation struck me once I gained awareness. I look around and I see that I am in a dark cave lit up by mushrooms.")
-    print("'What the hell? Is this a dream?' I asked myself.")
-
     # shen = Person('Shen',10)
     # print('Current energy: ', shen.energy)
     enviro = Enviro(0)
@@ -75,7 +112,13 @@ if __name__ == '__main__':
     loop = 1
     while True:
         # first input loop
-        while loop == 1:
+        enviro.create_room('cave')
+        while loop == 1:            
+            if not enviro.room_visit('cave'):
+                print("A weird sensation struck me once I gained awareness. I look around and I see that I am in a dark cave lit up by mushrooms.")
+                print("'What the hell? Is this a dream?' I asked myself.")
+                enviro.room_visited_set('cave')
+            
             if loop==1:
                 input_one = input("Whatever it may be, I don't want to stay in this dark any longer than I need to.\n> ")
                 
@@ -110,7 +153,7 @@ if __name__ == '__main__':
         while loop == 3:
             if loop==3:
                 print("I purse my lips and ponder on what to do.")
-                input_three = input("Should I go towards the light or eat mushrooms?")
+                input_three = input("Should I go towards the light or eat mushrooms?\n> ")
             
             if input_three.lower() in ['eat mushroom', 'eat', 'mushroom']:
                 print("Yum! Just kidding. That was really gross but I did it any way.")
@@ -123,8 +166,16 @@ if __name__ == '__main__':
             else:
                 enviro.person.fidget()
                 
+        enviro.create_room('outside')
         while loop == 4:
-            if loop==4:
+            if not enviro.room_visit('outside'):
                 print("Stepping into the light, I quickly realized that I am about to step off of a cliff.")
-                print("'Woah!' I exclaim as I hurriedly back up from the edge.")
+                print("'Woah! Let me back up a step here.' I exclaim as I hurriedly back up from the edge.")
+                enviro.room_visited_set('outside')
+                
+            if loop==4:                
+                input_four = input("What should I do now?\n>")
+                
+            if input_four.lower() in ['look']:
+                print("I look around.")
             
