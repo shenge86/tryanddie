@@ -24,6 +24,45 @@ person = r"""
           \ \ |________| / /
 """
 
+mushroom = r"""
+                       .-'~~~-.
+                     .'o  oOOOo`.
+                    :~~~-.oOo   o`.
+                     `. \ ~-.  oOOo.
+                       `.; / ~.  OO:
+                       .'  ;-- `.o.'
+                      ,'  ; ~~--'~
+                      ;  ;
+_______\|/__________\\;_\\//___\|/________
+
+"""
+
+cave = r"""
+ ********************************************************************************
+*                    /   \              /'\       _                              *
+*\_..           /'.,/     \_         .,'   \     / \_                            *
+*    \         /            \      _/       \_  /    \     _                     *
+*     \__,.   /              \    /           \/.,   _|  _/ \                    *
+*          \_/                \  /',.,''\      \_ \_/  \/    \                   *
+*                           _  \/   /    ',../',.\    _/      \                  *
+*             /           _/m\  \  /    |         \  /.,/'\   _\                 *
+*           _/           /MMmm\  \_     |          \/      \_/  \                *
+*          /      \     |MMMMmm|   \__   \          \_       \   \_              *
+*                  \   /MMMMMMm|      \   \           \       \    \             *
+*                   \  |MMMMMMmm\      \___            \_      \_   \            *
+*                    \|MMMMMMMMmm|____.'  /\_            \       \   \_          *
+*                    /'.,___________...,,'   \            \   \        \         *
+*                   /       \          |      \    |__     \   \_       \        *
+*                 _/        |           \      \_     \     \    \       \_      *
+*                /                               \     \     \_   \        \     *
+*                                                 \     \      \   \__      \    *
+*                                                  \     \_     \     \      \   *
+*                                                   |      \     \     \      \  *
+*                                                    \            |            \ *
+ ********************************************************************************
+
+"""
+
 #%% classes
 class Person():
     def __init__(self,name,energy):
@@ -130,6 +169,30 @@ class Enviro():
     def room_visited_set(self,roomname):
         self.room_state[roomname].visited = True
 
+#%% events and encounters
+def room_cave(loop):
+    if not enviro.room_visit('cave'):
+        print("I look around and I see that I am in a dark cave lit up by mushrooms.")
+        print(mushroom)
+        enviro.room_visited_set('cave')
+    
+    if loop==1:
+        input_one = input("Am I in a virtual reality simulation? Whatever the case is, I don't want to stay in this dark any longer than I need to.\n> ")
+        
+    if input_one.lower() in ['shout', 'yell', 'scream']:
+        enviro.person.yell("The echoes came back. There was no other response.")
+        print("Wow, that was quite the waste of energy, I thought.")   
+        enviro.personenergy -=1
+    elif input_one.lower() in ['eat mushroom', 'eat', 'mushroom', 'yes', 'y']:
+        enviro.person.eat("mushroom",1)
+        print("I instantly started shrinking. Also, I feel a bit stronger.")
+        print("Now that I am the size of a mouse, I can see that in front of me there is a small tunnel.")
+        print("It is possibly made by a small rodent.")
+        loop=2
+    else:
+        enviro.person.fidget()
+
+
 #%% Test
 Test = False
 if Test:
@@ -150,8 +213,8 @@ if __name__ == '__main__':
     print("---------------------------------------------------------")
     # shen = Person('Shen',10)
     # print('Current energy: ', shen.energy)
-    print("A weird sensation struck me once I gained awareness. I look around and I see that I am in a dark cave lit up by mushrooms.")
-    print("'What the hell? Is this a dream?' I asked myself.")
+    print("A weird sensation struck me once I regained awareness.")
+    print("'What the hell? Is this a dream?' Somehow everything seems strangely familiar. I asked myself.")
     print("Who am I anyway? After a moment of clutching my head, I slowly recalled my name.")
     person_name = input("'I can't remember anything else but at least I know my name is: ")
     enviro = Enviro(0,person_name)
@@ -166,6 +229,8 @@ if __name__ == '__main__':
         enviro.create_room('cave')
         while loop == 1:
             if not enviro.room_visit('cave'):
+                print("I look around and I see that I am in a dark cave lit up by mushrooms.")
+                print(mushroom)
                 enviro.room_visited_set('cave')
             
             if loop==1:
@@ -175,7 +240,7 @@ if __name__ == '__main__':
                 enviro.person.yell("The echoes came back. There was no other response.")
                 print("Wow, that was quite the waste of energy, I thought.")   
                 enviro.personenergy -=1
-            elif input_one.lower() in ['eat mushroom', 'eat', 'mushroom']:
+            elif input_one.lower() in ['eat mushroom', 'eat', 'mushroom', 'yes', 'y']:
                 enviro.person.eat("mushroom",1)
                 print("I instantly started shrinking. Also, I feel a bit stronger.")
                 print("Now that I am the size of a mouse, I can see that in front of me there is a small tunnel.")
@@ -192,7 +257,7 @@ if __name__ == '__main__':
             if input_two.lower() in ['system']:
                 enviro.person.system()
                 
-            if input_two.lower() in ['climb', 'yes']:
+            if input_two.lower() in ['climb', 'yes', 'y']:
                 print("I start to slowly crawl into the dirt tunnel. It is extremely hard to shuffle in this tunnel.")
                 print("Since I am scared of snakes, I move exceedingly slowly.")
                 print("Finally I exit into a much larger cavern. To my present size, it was automatically gigantic.")
@@ -208,11 +273,12 @@ if __name__ == '__main__':
                 input_three = input("Should I go towards the light or eat mushrooms?\n> ")
             
             if input_three.lower() in ['eat mushroom', 'eat', 'mushroom']:
+                enviro.person.eat("mushroom",1)
                 print("Yum! Just kidding. That was really gross but I did it any way.")
                 print("I started to grow larger like Alice in Wonderland.")
                 print("Time to get out of here!")
                 loop=4
-            elif input_three.lower() in ['leave', 'outside', 'light']:
+            elif input_three.lower() in ['leave', 'outside', 'light', 'yes', 'y']:
                 print("I chose to ignore the mushrooms and go directly outside.")
                 loop=4
             else:
@@ -223,11 +289,37 @@ if __name__ == '__main__':
             if not enviro.room_visit('outside'):
                 print("Stepping into the light, I quickly realized that I am about to step off of a cliff.")
                 print("'Woah! Let me back up a step here.' I exclaim as I hurriedly back up from the edge.")
+                print(cave)
                 enviro.room_visited_set('outside')
                 
             if loop==4:                
                 input_four = input("What should I do now?\n>")
                 
-            if input_four.lower() in ['look']:
-                print("I look around.")
-            
+            if input_four.lower() in ['look','see','examine']:
+                print("I look around and notice a small track to the right of me. It looks like a path down the nountain.")
+                loop=1
+            elif input_four.lower() in ['track','right']:
+                print("I walk towards the track on my right and start descending.")
+                loop=6
+            elif input_four.lower() in ['jump','j','yes','y']:
+                print("Taking a look down I can see that I'm at least a couple of hundred feet above the ground.")
+                print("If this is a simulation or a dream, I should be able to survive if I jump right?")
+                jumpornot = input("Should I try my luck and see if I can land safely?")                
+                if jumpornot.lower() in ['yes','y']:
+                    print("I jump off and in a short while I impacted the ground.")
+                    print("OUCH! That really hurts.")
+                    enviro.personenergy-=11
+                    loop=5
+                else:
+                    print("I slowly back away from the edge.")
+            else:
+                enviro.person.fidget()
+                
+        while loop == 5:
+            if enviro.person.energy <= 0:
+                room_cave(1)
+            else:
+                print("Wow! I can't believe I'm still alive!")
+                
+        while loop == 6:
+            print("The trail is long and tedious to walk down but thankfully not too rough.")
