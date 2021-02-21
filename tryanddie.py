@@ -75,6 +75,7 @@ class Person():
     def __init__(self,name,energy):
         self.name = name
         self.energy = energy
+        self.inventory = ['cellphone','pen']
     
     # @property
     # def name(self):
@@ -102,27 +103,103 @@ class Person():
         print("*Gasp* I am alive!")
         self._name = name
         self._energy = 10
+        self._inventory = ['cellphone','pen']
         return self
     
     # human actions
+    def action(self,input_action):
+        if input_action.lower() in ['jump','hop','leap']:
+            self.jump()
+        elif input_action.lower() in ['call']:
+            self.call()
+        elif input_action.lower() in ['drop']:
+            obj = self.drop()
+            return obj
+        elif input_action.lower() in ['fuck']:
+            self.fuck()
+        elif input_action.lower() in ['lick']:
+            self.lick()
+        elif input_action.lower() in ['pick','pickup']:
+            obj = self.pick()
+            return obj
+        elif input_action.lower() in ['system']:
+            self.system()
+        elif input_action.lower() in ['punch','attack']:
+            self.punch()
+        elif input_action.lower() in ['write']:
+            self.write()
+        else:
+            self.fidget()
+
+    def call(self,signal='bad'):
+        if 'cellphone' in self.inventory:
+            print("I pulled out my cellphone to try to make a call.")
+            if signal == 'bad':
+                print("No signal? This is not helpful.")
+            else:
+                pass
+        else:
+            print("I don't have a phone!")
+    
+    def drop(self):
+        print("I want to drop something.")
+        print(*self.inventory,sep=' ')
+        obj = input("I chose to drop:\n> ")
+        if obj in self.inventory:
+            print(f"I dropped the {obj} on to the floor.")
+            self.inventory.remove(obj)
+            return obj
+        else:
+            print("I am not carrying that object.")
+    
     def eat(self,edible,energy):
         print(f"I ate the {edible}.")
         self.energy += energy
-        
-    def yell(self,words):
-        print("I yelled as loudly as possible!")
-        print(words)
     
     def fidget(self):
         print("Fidgeting while standing here doesn't really help my current situation.")
         print(person)
+    
+    def fuck(self):
+        print("Since there was no one around to f*ck with, I simply yelled 'f*ck!' as loudly as I could. Whatever I expected didn't happen.")
+    
+    def jump(self):
+        print("I jump straight into the air which accomplishes nothing at all.")
+    
+    def lick(self):
+        print("I licked my mouth. Wow, chapped lips. I definitely need some chapstick.")
+
+    def pick(self):
+        print("I want to pick up something.")
+        obj = input("I choose to pick up:\n> ")
+        return obj
+        #self.inventory.append(obj)
+    
+    def punch(self,target='air'):
+        print(f"I punched the {target} as hard as I could.")
+        print("Wow, that did absolutely nothing and I think I just used up some energy.")
+        self.energy -= 1
+
+    def write(self):
+        if 'pen' in self.inventory:
+            print("I take out my pen and drew a picture of my face.")
+            print("Well, that was fun.")
+        else:
+            print("I don't have a pen or pencil.")
+
+    
+    def yell(self,words):
+        print("I yelled as loudly as possible!")
+        print(words)
         
     def system(self):
         print(f"Hello {self.name}! Welcome to the System help screen.")
         print("Your stats are as follows:")
-        print("Energy:", self.energy)
-        print("Your actions possible are as follows:")
-        print("eat, fidget, system, yell")
+        print("Energy: ", self.energy)
+        print("Your unique actions possible are as follows:")
+        print("call, eat, fidget, fuck, jump, lick, punch, system, write, yell")
+        print("Inventory: ")
+        print(*self.inventory,sep=' ')
         print("Remember you just need to think of the word system and this will appear!")
 
 # room statuses        
@@ -131,6 +208,19 @@ class Room():
         self.name = name
         self.visited = visited
         self.corpses = 0
+        self.inventory = []
+    
+    def room_add(self,obj):
+        print(f"The {obj} is placed in the room.")
+        self.inventory.append(obj)
+
+    def room_drop(self,obj):
+        if obj in self.inventory:
+            print(f"The {obj} is picked up from the room.")
+            self.inventory.remove(obj)
+        else:
+            print(f"Nothing like {obj} is seen here!")
+
 
 # overall environment
 class Enviro():
@@ -188,6 +278,19 @@ class Enviro():
     # reset to not visited
     def room_visited_reset(self,roomname):
         self.room_state[roomname].visited = False
+    
+    def room_pickup(self,roomname,obj):
+        if obj in self.person.inventory:
+            self.rooms[roomname].room_add(obj)
+            self.person.inventory.remove(obj)
+
+    def person_pickup(self,roomname,obj):
+        print("Trying to find: ", obj)
+        if obj in self.rooms[roomname].inventory:
+            self.rooms[roomname].room_drop(obj)
+            self.person.inventory.append(obj)
+        else:
+            print(f"I don't see any item called {obj} that I can pick up.")
 
 #%% events and encounters
 def room_cave(loop):
@@ -207,21 +310,36 @@ def room_cave(loop):
             enviro.room_visited_set('cave')
         
         if loop==1:
+            print("Aside from the mushrooms, I see a few patches of mold, large boulders and possibly a few other items of interest. Objects of interest:")
+            print(*enviro.rooms['cave'].inventory,sep=' ')
             input_one = input("Am I in a virtual reality simulation? Whatever the case is, I don't want to stay in this dark any longer than I need to.\n> ")
-            
+        
         if input_one.lower() in ['shout', 'yell', 'scream']:
             enviro.person.yell("The echoes came back. There was no other response.")
             print("Wow, that was quite the waste of energy, I thought.")   
             enviro.personenergy -=1
         elif input_one.lower() in ['eat mushroom', 'eat', 'mushroom', 'yes', 'y']:
             enviro.person.eat("mushroom",1)
-            print("I instantly started shrinking. Also, I feel a bit stronger.")
-            print("Now that I am the size of a mouse, I can see that in front of me there is a small tunnel.")
-            print("It is possibly made by a small rodent.")
+            A = "I instantly started shrinking. Also, I feel a bit..."
+            A1 = ef.bold + "stronger!" + ef.rs
+            B = "Now that I am the size of a mouse, I can see that in front of me there is a small tunnel."
+            C = "It is possibly made by a small rodent."
+            print(A,A1,B,C)
             loop=2
             return loop
-        else:
-            enviro.person.fidget()
+        
+        # default actions capture all other actions
+        obj = enviro.person.action(input_one)
+
+        # interactions with the environment
+        if input_one in ['drop']:
+            #enviro.rooms['cave'].inventory.append(obj)
+            enviro.rooms['cave'].room_add(obj)
+            #print(enviro.rooms['cave'].inventory)
+
+        if input_one in ['pick','pickup']:
+            enviro.person_pickup('cave',obj)
+        
 
 def win():
     print("Holy moly! I am out of here and I am free. Suddenly, my entire memory comes back and I understand everything now.")
