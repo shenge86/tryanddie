@@ -2,8 +2,15 @@
 """
 Created on Fri Feb 19 18:41:27 2021
 
-@author: sheng
+@author: Shen Ge
+@name: Try and Die - A Text Game
 """
+
+import os, sys
+if sys.platform == "win32":
+    os.system('color')
+    
+from sty import fg, bg, ef, rs
 
 #%% ASCII art
 person = r"""
@@ -234,10 +241,10 @@ if Test:
 
 #%%
 if __name__ == '__main__':
-    print("---------------------------------------------------------")
-    print("Welcome to Try and Die - A Text Game of Possible Death")
-    print("In this game, dying may be necessary to ultimately win.")
-    print("---------------------------------------------------------")
+    print(fg.red + "---------------------------------------------------------" + fg.rs)
+    print(bg.blue + "Welcome to Try and Die - A Text Game of Possible Death" + bg.rs)
+    print(ef.italic + "In this game, dying may be necessary to ultimately win." + rs.italic)
+    print(fg.red + "---------------------------------------------------------" + fg.rs)
     # shen = Person('Shen',10)
     # print('Current energy: ', shen.energy)
     print("A weird sensation struck me once I regained awareness.")
@@ -304,8 +311,7 @@ if __name__ == '__main__':
                 input_four = input("What should I do now?\n>")
                 
             if input_four.lower() in ['look','see','examine']:
-                print("I look around and notice a small track to the right of me. It looks like a path down the nountain.")
-                loop=1
+                print("I look around and notice a small track to the right of me. It looks like a path down the mountain.")
             elif input_four.lower() in ['track','right']:
                 print("I walk towards the track on my right and start descending.")
                 loop=6
