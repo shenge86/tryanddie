@@ -18,6 +18,8 @@ if sys.platform == "win32":
     
 from sty import fg, bg, ef, rs
 
+import pickle
+
 #%% ASCII art
 person = r"""
         
@@ -338,12 +340,15 @@ class Room():
             print(f"Nothing like {obj} is seen here!")
 
 
-# overall environment
+#%% overall environment
 class Enviro():
     def __init__(self,deathstate,person_name):
         self.deathstate = 0
         self.person = Person(" ".join(w.capitalize() for w in person_name.split()),10)
+
+        # create all rooms upon initialization
         self.rooms = {}
+        self.create_rooms()
     
     @property
     def deathstate(self):
@@ -353,7 +358,7 @@ class Enviro():
     def deathstate(self,val):
         self._deathstate = val
     
-    # person classes
+    ### person classes
     @property
     def personenergy(self):
         return self.person._energy
@@ -367,7 +372,16 @@ class Enviro():
             print("Oh, ", self.deathstate)
             self.person = self.person.reset(self.person.name)
     
-    # room classes
+    ### room classes
+    # creates a dictionary of rooms
+    def create_rooms(self):
+        self.create_room('cave')
+        self.create_room('outside')
+        self.create_room('woods_one')
+        self.create_room('trail')
+        print(self.room_state)
+
+    # creates one room
     def create_room(self,name):
         if name in self.rooms:
             print(f'What? I am at the {name} again?')
@@ -395,6 +409,7 @@ class Enviro():
     def room_visited_reset(self,roomname):
         self.room_state[roomname].visited = False
     
+    ### room person interactions
     def room_pickup(self,roomname,obj):
         if obj in self.person.inventory:
             self.rooms[roomname].room_add(obj)
@@ -456,6 +471,20 @@ def room_cave(loop):
             if input_one in ['pick','pickup']:
                 enviro.person_pickup('cave',obj)
         
+#%% Game states
+def new_game():
+    print("Starting a new life...")
+    print("Who am I anyway? I was laying on the floor and I felt like I just got off a rollercoaster. After a moment of clutching my head, I stood up.")
+    person_name = input("'I can't remember anything else but at least I know my name is: ")
+
+    enviro = Enviro(0,person_name)
+
+    print(f"Ah, that's right. My name is {enviro.person.name}")
+    print("A weird sensation struck me once I regained awareness.")
+    print("'What the hell? Is this a dream?' Somehow everything seems strangely familiar. I asked myself.")
+    print("Suddenly, a massive blue screen filled my view. It was the most realistic hallucination I have ever seen.")
+    enviro.person.system()
+    return enviro
 
 def win():
     print("Holy moly! I am out of here and I am free. Suddenly, my entire memory comes back and I understand everything now.")
@@ -481,21 +510,21 @@ if __name__ == '__main__':
     print(fg.red + "---------------------------------------------------------" + fg.rs)
     # shen = Person('Shen',10)
     # print('Current energy: ', shen.energy)
-    print("A weird sensation struck me once I regained awareness.")
-    print("'What the hell? Is this a dream?' Somehow everything seems strangely familiar. I asked myself.")
-    print("Who am I anyway? After a moment of clutching my head, I slowly recalled my name.")
-    person_name = input("'I can't remember anything else but at least I know my name is: ")
-    enviro = Enviro(0,person_name)
-    print(f"Ah, that's right. My name is {enviro.person.name}")
+
+    load_game = input("Would you like to load a game? > ")
+    if load_game in ['yes','y','yeah']:
+        load_game_file = input("What is your file name? > ")
+        try:
+            enviro = pickle.load(open(load_game_file,"rb"))
+        except:
+            print("File cannot be found!")
+            enviro = new_game()
+    else:
+        enviro = new_game()
+        pickle.dump(enviro,open("save.pickle","wb"))
+
+    print(fg.red + "---------------------------------------------------------" + fg.rs)
     
-    print("Suddenly, a massive blue screen filled my view. It was the most realistic hallucination I have ever seen.")
-    enviro.person.system()
-    
-    # create rooms
-    enviro.create_room('cave')
-    enviro.create_room('outside')
-    enviro.create_room('woods_one')
-    enviro.create_room('trail')
     
     loop = 1
     loop = room_cave(1)
