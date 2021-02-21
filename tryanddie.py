@@ -342,9 +342,13 @@ class Room():
 
 #%% overall environment
 class Enviro():
-    def __init__(self,deathstate,person_name):
+    def __init__(self,deathstate,person_name,room_current=1):
+        # number of times protagonist has died
         self.deathstate = 0
         self.person = Person(" ".join(w.capitalize() for w in person_name.split()),10)
+
+        # define current room
+        self.room_current = room_current
 
         # create all rooms upon initialization
         self.rooms = {}
@@ -379,7 +383,6 @@ class Enviro():
         self.create_room('outside')
         self.create_room('woods_one')
         self.create_room('trail')
-        print(self.room_state)
 
     # creates one room
     def create_room(self,name):
@@ -477,7 +480,7 @@ def new_game():
     print("Who am I anyway? I was laying on the floor and I felt like I just got off a rollercoaster. After a moment of clutching my head, I stood up.")
     person_name = input("'I can't remember anything else but at least I know my name is: ")
 
-    enviro = Enviro(0,person_name)
+    enviro = Enviro(0,person_name,room_current=1)
 
     print(f"Ah, that's right. My name is {enviro.person.name}")
     print("A weird sensation struck me once I regained awareness.")
@@ -510,28 +513,30 @@ if __name__ == '__main__':
     print(fg.red + "---------------------------------------------------------" + fg.rs)
     # shen = Person('Shen',10)
     # print('Current energy: ', shen.energy)
+    save_game_file = input("This game autosaves after every room. Please entire the save game file you desire: > ")
+    save_game_file += '.pickle'
 
     load_game = input("Would you like to load a game? > ")
     if load_game in ['yes','y','yeah']:
         load_game_file = input("What is your file name? > ")
+        load_game_file += '.pickle'
         try:
             enviro = pickle.load(open(load_game_file,"rb"))
         except:
             print("File cannot be found!")
             enviro = new_game()
+            loop = room_cave(enviro.room_current)
     else:
         enviro = new_game()
-        pickle.dump(enviro,open("save.pickle","wb"))
+        enviro.room_current = room_cave(enviro.room_current)
 
+    pickle.dump(enviro,open(save_game_file,"wb"))
     print(fg.red + "---------------------------------------------------------" + fg.rs)
     
-    
-    loop = 1
-    loop = room_cave(1)
     while True:                
-        while loop == 2:
-            if loop==2:
-                print("Well, this is pretty tight but I think I can squeeze in.")
+        while enviro.room_current == 2:
+            if enviro.room_current == 2:
+                print("Well, this tunnel is pretty tight but I think I can squeeze in.")
                 input_two = input("Should I climb in?\n> ")
             
             if input_two.lower() in ['system']:
@@ -543,7 +548,9 @@ if __name__ == '__main__':
                 print("Finally I exit into a much larger cavern. To my present size, it was automatically gigantic.")
                 print("I look around and try to grasp my bearing. There appears to be light directly in front of me. There are also other mushrooms laying around for me to eat.")
                 print("Ugh! Those taste gross but maybe eating one of those will make me bigger again? I'll hate to go outside in my current size.")
+                pickle.dump(enviro,open(save_game_file,"wb")) # saves the state before going to next room
                 loop=3
+                enviro.room_current=3
             else:
                 enviro.person.fidget()
                                 
