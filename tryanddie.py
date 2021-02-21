@@ -117,12 +117,15 @@ class Person():
         print("Your actions possible are as follows:")
         print("eat, fidget, system, yell")
         print("Remember you just need to think of the word system and this will appear!")
-        
+
+# room statuses        
 class Room():
     def __init__(self,name,visited):
         self.name = name
         self.visited = visited
+        self.corpses = 0
 
+# overall environment
 class Enviro():
     def __init__(self,deathstate,person_name):
         self.deathstate = 0
@@ -153,8 +156,10 @@ class Enviro():
     
     # room classes
     def create_room(self,name):
-        # print(name)
-        self.rooms.update({name:Room(name,False)})
+        if name in self.rooms:
+            print(f'What? I am at the {name} again?')
+        else:
+            self.rooms.update({name:Room(name,False)})
     
     @property
     def room_state(self):
@@ -168,30 +173,52 @@ class Enviro():
     # change room to visited
     def room_visited_set(self,roomname):
         self.room_state[roomname].visited = True
+        # if self.room_state[roomname].visited:
+        #     self.room_state[roomname].visited = False
+        # else:
+        #     self.room_state[roomname].visited = True
+    
+    # reset to not visited
+    def room_visited_reset(self,roomname):
+        self.room_state[roomname].visited = False
 
 #%% events and encounters
 def room_cave(loop):
-    if not enviro.room_visit('cave'):
-        print("I look around and I see that I am in a dark cave lit up by mushrooms.")
-        print(mushroom)
-        enviro.room_visited_set('cave')
-    
-    if loop==1:
-        input_one = input("Am I in a virtual reality simulation? Whatever the case is, I don't want to stay in this dark any longer than I need to.\n> ")
+    # first room resets all other rooms to 0
+    for key in enviro.rooms:
+        # print('resetting all rooms...')
+        enviro.room_visited_reset(key)
         
-    if input_one.lower() in ['shout', 'yell', 'scream']:
-        enviro.person.yell("The echoes came back. There was no other response.")
-        print("Wow, that was quite the waste of energy, I thought.")   
-        enviro.personenergy -=1
-    elif input_one.lower() in ['eat mushroom', 'eat', 'mushroom', 'yes', 'y']:
-        enviro.person.eat("mushroom",1)
-        print("I instantly started shrinking. Also, I feel a bit stronger.")
-        print("Now that I am the size of a mouse, I can see that in front of me there is a small tunnel.")
-        print("It is possibly made by a small rodent.")
-        loop=2
-    else:
-        enviro.person.fidget()
+    # first possible event at the cave
+    while loop==1:
+        # if not visited then create room
+        print(mushroom)
+        if not enviro.room_visit('cave'):
+            print("I look around and I see that I am in a dark cave lit up by mushrooms.")
+            print(f"Is that a corpse over there? I think I see {enviro.rooms['cave'].corpses} bodies.")
+            print("I shudder and I decide to avoid the sight.")            
+            enviro.room_visited_set('cave')
+        
+        if loop==1:
+            input_one = input("Am I in a virtual reality simulation? Whatever the case is, I don't want to stay in this dark any longer than I need to.\n> ")
+            
+        if input_one.lower() in ['shout', 'yell', 'scream']:
+            enviro.person.yell("The echoes came back. There was no other response.")
+            print("Wow, that was quite the waste of energy, I thought.")   
+            enviro.personenergy -=1
+        elif input_one.lower() in ['eat mushroom', 'eat', 'mushroom', 'yes', 'y']:
+            enviro.person.eat("mushroom",1)
+            print("I instantly started shrinking. Also, I feel a bit stronger.")
+            print("Now that I am the size of a mouse, I can see that in front of me there is a small tunnel.")
+            print("It is possibly made by a small rodent.")
+            loop=2
+            return loop
+        else:
+            enviro.person.fidget()
 
+def win():
+    print("Holy moly! I am out of here and I am free. Suddenly, my entire memory comes back and I understand everything now.")
+    exit()
 
 #%% Test
 Test = False
@@ -204,7 +231,7 @@ if Test:
     enviro.room_visited_set('study')
     room_visited_state = enviro.room_visit('study')
     print(room_visited_state)
-        
+
 #%%
 if __name__ == '__main__':
     print("---------------------------------------------------------")
@@ -223,32 +250,14 @@ if __name__ == '__main__':
     print("Suddenly, a massive blue screen filled my view. It was the most realistic hallucination I have ever seen.")
     enviro.person.system()
     
+    # create rooms
+    enviro.create_room('cave')
+    enviro.create_room('outside')
+    enviro.create_room('woods_one')
+    
     loop = 1
-    while True:
-        # first input loop
-        enviro.create_room('cave')
-        while loop == 1:
-            if not enviro.room_visit('cave'):
-                print("I look around and I see that I am in a dark cave lit up by mushrooms.")
-                print(mushroom)
-                enviro.room_visited_set('cave')
-            
-            if loop==1:
-                input_one = input("Am I in a virtual reality simulation? Whatever the case is, I don't want to stay in this dark any longer than I need to.\n> ")
-                
-            if input_one.lower() in ['shout', 'yell', 'scream']:
-                enviro.person.yell("The echoes came back. There was no other response.")
-                print("Wow, that was quite the waste of energy, I thought.")   
-                enviro.personenergy -=1
-            elif input_one.lower() in ['eat mushroom', 'eat', 'mushroom', 'yes', 'y']:
-                enviro.person.eat("mushroom",1)
-                print("I instantly started shrinking. Also, I feel a bit stronger.")
-                print("Now that I am the size of a mouse, I can see that in front of me there is a small tunnel.")
-                print("It is possibly made by a small rodent.")
-                loop=2
-            else:
-                enviro.person.fidget()                
-                
+    loop = room_cave(1)
+    while True:                
         while loop == 2:
             if loop==2:
                 print("Well, this is pretty tight but I think I can squeeze in.")
@@ -284,7 +293,6 @@ if __name__ == '__main__':
             else:
                 enviro.person.fidget()
                 
-        enviro.create_room('outside')
         while loop == 4:
             if not enviro.room_visit('outside'):
                 print("Stepping into the light, I quickly realized that I am about to step off of a cliff.")
@@ -304,22 +312,34 @@ if __name__ == '__main__':
             elif input_four.lower() in ['jump','j','yes','y']:
                 print("Taking a look down I can see that I'm at least a couple of hundred feet above the ground.")
                 print("If this is a simulation or a dream, I should be able to survive if I jump right?")
-                jumpornot = input("Should I try my luck and see if I can land safely?")                
-                if jumpornot.lower() in ['yes','y']:
-                    print("I jump off and in a short while I impacted the ground.")
-                    print("OUCH! That really hurts.")
-                    enviro.personenergy-=11
+                input_jumpornot = input("Should I try my luck and see if I can land safely?\n> ")                
+                if input_jumpornot.lower() in ['yes','y']:                    
                     loop=5
                 else:
                     print("I slowly back away from the edge.")
             else:
                 enviro.person.fidget()
-                
+        
         while loop == 5:
-            if enviro.person.energy <= 0:
-                room_cave(1)
-            else:
-                print("Wow! I can't believe I'm still alive!")
+            if not enviro.room_visit('woods_one'):
+                enviro.room_visited_set('woods_one')
+                if enviro.person.energy <= 11:
+                    print("I jump off and in a short while I impacted the ground.")
+                    print("OUCH! That really hurts.")
+                    enviro.personenergy-=11
+                    enviro.rooms['cave'].corpses+=1                    
+                    loop=room_cave(1)
+                else:
+                    enviro.personenergy-=11
+                    print("Wow! I can't believe I'm still alive!")
+                    print("I looked around and noticed that I'm now in a small meadow surrounded by ominous looking massive trees.")
+                    print("From my vantage point here, I can see that I can go north towards the woods or south towards uh ... also the woods.")
+                    input_woods=input("Which woods should I head towards?\n> ")
                 
         while loop == 6:
             print("The trail is long and tedious to walk down but thankfully not too rough.")
+            if enviro.rooms['cave'].corpses < 2:
+                loop=room_cave(1)
+            else:
+                print("I have died enough times. Finally, time to wake up.")
+                win()
