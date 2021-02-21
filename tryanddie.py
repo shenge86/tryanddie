@@ -4,6 +4,12 @@ Created on Fri Feb 19 18:41:27 2021
 
 @author: Shen Ge
 @name: Try and Die - A Text Game
+
+
+@credits:
+    https://ascii.co.uk/art/cave
+    https://ascii.co.uk/art/tree
+    https://www.asciiart.eu/space/aliens
 """
 
 import os, sys
@@ -67,6 +73,116 @@ cave = r"""
 *                                                   |      \     \     \      \  *
 *                                                    \            |            \ *
  ********************************************************************************
+
+"""
+
+forest = r"""
+                                                        ,
+                                            .__ ._       \_.          
+                                     _, _.  '  \/   \.-  /            
+                                      \/     .-_`   // |/     \,      
+                     .---\"-.          \.   '   \`. ||  \.-'  /       
+                    F        Y        .-.`-(   _/\ V/ \\//,-' >-'   ._,
+                   F          Y   .__/   `. \.   ' J   ) ./  / __._/  
+                  J         \, I    '   _/ \  \  | |  / /  .'-'.-' `._,
+           (       L   \_.--.| \_.      ' .___ `\: | / .--'.-'"     \ 
+         \ '\    .  L   /    \\/        ._/`-.`  \ .'.' .'---./__   ' 
+    \__  '\ ) \._/   `-.__. ` \\_. '   .---.  \     /  /  ,   `  `    
+  --'  \\  ): // \,            `-.`__.'     `- \  /   / _/-.---.__.- . 
+     _.-`.'/ /'\_, ._     >--.-""'____.--"`_     '   /.'..' \   \   _/`
+ _ .---._\ \'/ '__./__.-..  / .-|(    x_.-'___  |   :' /    _..---_' \
+ .:' /`\ `. `..'.--'\      /.' /`-`._  `-,'   ` '   I '_.--'__--..___.--._.-
+     `  `. `\/'/  _.   _.-'      _.____./ .-.--""-. .-"    ' _..-.---'   \
+  -._ .--.\ / /-./     /   .---'-//.___. .-'       \__ .--.  `    `.     '`-
+ ,--'/.-. ^.   .-.--.  ` _/    _//     ./   _..   .'  `.    \ \    |_.
+    /' | >.   ' | \._.-       '    _..'  `.' . `.       )    | |\  `          
+  ./ \ \'  ) c| /  \     \_..  .--'    ,\ \_/`  :    )  (`-. `.|`\\            
+   \'  / ,-.  | ` ./`  ._/ `\\'.--.,-((  `.`.__ |   _/   \    |)  `--._/`     
+______'\   |  < __________  //'  //  _)   )/-._`.  (,-')  )  / \_.    /\. _____
+a:f        |  |        .__./    //  '\  |//    `.\ '\ (  (  <`   ._  '
+           >  |      _.  /   ..-\ _    _/ \_.  \ `\    \_ `---.-'__   
+        . /  `-   _.'        /   `   _/|       J  /`     `-,,-----.`-.
+            '  .:'          '`      '          < `   f  I //        `�\_,
+              '                         \.     J        I/\_.        ./
+         __/                            `:     I  .:    K  `          `
+         \/ )                            `,   J         L             
+          )_(_                             .  F  .-'    J             
+         /    `.                           .  I  (.   . I _.-.._      
+   '    <'    \ )                     _.---.J/      :'   L -'         
+ .:.     \. _.->/                        _.-'_.)     ` `-.`---.,_.    
+:<        (    \                    .--""   .F' J) `.`L.__`-.___      
+.:        |-'\_.|                          Y ..Z     ))   `--'  `-    
+.         ) | > :                            . '    :'                
+          / ) L_J                            .x,.
+          L_J .,                             .:<.,  
+        .'`   `                               :J.,` 
+                                           . ;.+K,:.
+                                               .,L+.,
+
+
+
+"""
+
+wormsturn = r"""
+              _{\ _{\{\/}/}/}__
+             {/{/\}{/{/\}(\}{/\} _
+            {/{/\}{/{/\}(_)\}{/{/\}  _
+         {\{/(\}\}{/{/\}\}{/){/\}\} /\}
+        {/{/(_)/}{\{/)\}{\(_){/}/}/}/}
+       _{\{/{/{\{/{/(_)/}/}/}{\(/}/}/}
+      {/{/{\{\{\(/}{\{\/}/}{\}(_){\/}\}
+      _{\{/{\{/(_)\}/}{/{/{/\}\})\}{/\}
+     {/{/{\{\(/}{/{\{\{\/})/}{\(_)/}/}\}
+      {\{\/}(_){\{\{\/}/}(_){\/}{\/}/})/}
+       {/{\{\/}{/{\{\{\/}/}{\{\/}/}\}(_)
+      {/{\{\/}{/){\{\{\/}/}{\{\(/}/}\}/}
+       {/{\{\/}(_){\{\{\(/}/}{\(_)/}/}\}
+         {/({/{\{/{\{\/}(_){\/}/}\}/}(\}
+          (_){/{\/}{\{\/}/}{\{\)/}/}(_)
+            {/{/{\{\/}{/{\{\{\(_)/}
+             {/{\{\{\/}/}{\{\\}/}
+              {){/ {\/}{\/} \}\}
+              (_)  \.-'.-/
+          __...--- |'-.-'| --...__
+   _...--"   .-'   |'-.-'|  ' -.  ""--..__
+ -"    ' .  . '    |.'-._| '  . .  '   jro
+ .  '-  '    .--'  | '-.'|    .  '  . '
+          ' ..     |'-_.-|
+  .  '  .       _.-|-._ -|-._  .  '  .
+              .'   |'- .-|   '.
+  ..-'   ' .  '.   `-._.-�   .'  '  - .
+   .-' '        '-._______.-'     '  .
+        .      ~,
+    .       .   |\   .    ' '-.
+    ___________/  \____________
+   /  Why is it, when you want \
+  |  something, it is so damn   |
+  |    much work to get it?     |
+   \___________________________/
+"""
+
+flamethrower = r"""
+                                         )  (  (    (
+                                         (  )  () @@  )  (( (
+                                     (      (  )( @@  (  )) ) (
+                                   (    (  ( ()( /---\   (()( (
+     _______                            )  ) )(@ !O O! )@@  ( ) ) )
+    <   ____)                      ) (  ( )( ()@ \ o / (@@@@@ ( ()( )
+ /--|  |(  o|                     (  )  ) ((@@(@@ !o! @@@@(@@@@@)() (
+|   >   \___|                      ) ( @)@@)@ /---\-/---\ )@@@@@()( )
+|  /---------+                    (@@@@)@@@( // /-----\ \\ @@@)@@@@@(  .
+| |    \ =========______/|@@@@@@@@@@@@@(@@@ // @ /---\ @ \\ @(@@@(@@@ .  .
+|  \   \\=========------\|@@@@@@@@@@@@@@@@@ O @@@ /-\ @@@ O @@(@@)@@ @   .
+|   \   \----+--\-)))           @@@@@@@@@@ !! @@@@ % @@@@ !! @@)@@@ .. .
+|   |\______|_)))/             .    @@@@@@ !! @@ /---\ @@ !! @@(@@@ @ . .
+ \__==========           *        .    @@ /MM  /\O   O/\  MM\ @@@@@@@. .
+    |   |-\   \          (       .      @ !!!  !! \-/ !!  !!! @@@@@ .
+    |   |  \   \          )   -cfbd-   .  @@@@ !!     !!  .(. @.  .. .
+    |   |   \   \        (    /   .(  . \)). ( |O  )( O! @@@@ . )      .
+    |   |   /   /         ) (      )).  ((  .) !! ((( !! @@ (. ((. .   .
+    |   |  /   /   ()  ))   ))   .( ( ( ) ). ( !!  )( !! ) ((   ))  ..
+    |   |_<   /   ( ) ( (  ) )   (( )  )).) ((/ |  (  | \(  )) ((. ).
+____<_____\\__\__(___)_))_((_(____))__(_(___.oooO_____Oooo.(_(_)_)((_
 
 """
 
@@ -302,7 +418,7 @@ def room_cave(loop):
     # first possible event at the cave
     while loop==1:
         # if not visited then create room
-        print(mushroom)
+        print(fg.green + mushroom + fg.rs)
         if not enviro.room_visit('cave'):
             print("I look around and I see that I am in a dark cave lit up by mushrooms.")
             print(f"Is that a corpse over there? I think I see {enviro.rooms['cave'].corpses} bodies.")
@@ -327,18 +443,18 @@ def room_cave(loop):
             print(A,A1,B,C)
             loop=2
             return loop
-        
-        # default actions capture all other actions
-        obj = enviro.person.action(input_one)
+        else:
+            # default actions capture all other actions
+            obj = enviro.person.action(input_one)
 
-        # interactions with the environment
-        if input_one in ['drop']:
-            #enviro.rooms['cave'].inventory.append(obj)
-            enviro.rooms['cave'].room_add(obj)
-            #print(enviro.rooms['cave'].inventory)
+            # interactions with the environment
+            if input_one in ['drop']:
+                #enviro.rooms['cave'].inventory.append(obj)
+                enviro.rooms['cave'].room_add(obj)
+                #print(enviro.rooms['cave'].inventory)
 
-        if input_one in ['pick','pickup']:
-            enviro.person_pickup('cave',obj)
+            if input_one in ['pick','pickup']:
+                enviro.person_pickup('cave',obj)
         
 
 def win():
@@ -379,6 +495,7 @@ if __name__ == '__main__':
     enviro.create_room('cave')
     enviro.create_room('outside')
     enviro.create_room('woods_one')
+    enviro.create_room('trail')
     
     loop = 1
     loop = room_cave(1)
@@ -429,8 +546,8 @@ if __name__ == '__main__':
                 input_four = input("What should I do now?\n>")
                 
             if input_four.lower() in ['look','see','examine']:
-                print("I look around and notice a small track to the right of me. It looks like a path down the mountain.")
-            elif input_four.lower() in ['track','right']:
+                print("I look around and notice a small *trail* to the right of me. It looks like a path down the mountain.")
+            elif input_four.lower() in ['track','right','trail','walk','down']:
                 print("I walk towards the track on my right and start descending.")
                 loop=6
             elif input_four.lower() in ['jump','j','yes','y']:
@@ -457,13 +574,44 @@ if __name__ == '__main__':
                     enviro.personenergy-=11
                     print("Wow! I can't believe I'm still alive!")
                     print("I looked around and noticed that I'm now in a small meadow surrounded by ominous looking massive trees.")
-                    print("From my vantage point here, I can see that I can go north towards the woods or south towards uh ... also the woods.")
+                    print("From my vantage point here, I can see that I can go north towards the woods or south towards uh ... also the woods. They really don't look a whole lot different from each other.")
+                    print("Here goes the toss of a coin.")
                     input_woods=input("Which woods should I head towards?\n> ")
+
+            if input_woods.lower() in ['south','s']:
+                print("I started walking towards the south.")
+                loop=7
+
+            if input_woods.lower() in ['north','n']:
+                print("I started walking towards the north.")
+                loop=7
                 
         while loop == 6:
-            print("The trail is long and tedious to walk down but thankfully not too rough.")
+            print(fg.green + forest + fg.rs)
+            if not enviro.room_visit('trail'):
+                print("The trail is long and tedious to walk down but thankfully not too rough.")
+                enviro.room_visited_set('trail')
+
             if enviro.rooms['cave'].corpses < 2:
-                loop=room_cave(1)
+                input_six=input("I feel like I need to take a rest. There is a boulder over there. Should I push on or just rest?\n> ")
+                #loop=room_cave(1)
             else:
                 print("I have died enough times. Finally, time to wake up.")
                 win()
+
+            if input_six.lower() in ['rest','stop']:
+                print("I decided to rest for a little while sitting on top of the boulder.")
+                if enviro.person.energy<=10:
+                    print("Time passes by while my energy recovers.")
+                    enviro.personenergy+=1
+            elif input_six.lower() in ['continue','pushon','walk','hike','trail']:
+                print("There's no time to waste! I can't stop now. I need to continue walking.")
+                loop=7
+            else:
+                # default actions capture all other actions
+                obj = enviro.person.action(input_six)
+
+        while loop==7:
+            print(fg.green + wormsturn + fg.rs)
+            input("A lot more game development is under works. Stay tuned!")
+            print(fg.blue + flamethrower + fg.rs)
